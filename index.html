@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aplikasi BUMDes Subur Jaya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --maroon: #7b2843;
+            --maroon-dark: #5d1e32;
+            --green: #0a5d4a;
+            --green-light: #e6f2f0;
+            --maroon-light: #f4e9ec;
+            --text-dark: #1e293b;
+            --text-mid: #334155;
+            --text-soft: #64748b;
+            --border: #e2e8f0;
+            --bg: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100%;
+            background-color: var(--bg);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- Page System ---- */
+        .page { display: none; width: 100%; min-height: 100dvh; }
+        .page.active { display: block; }
+
+        /* ---- PHONE WRAPPER: semua halaman dikurung di sini ---- */
+        .phone {
+            width: 100%;
+            max-width: 430px;
+            min-height: 100dvh;
+            margin: 0 auto;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* ===================== LOGIN & DAFTAR ===================== */
+        #loginPage.active, #daftarPage.active { display: flex; justify-content: center; align-items: center; background: var(--white); }
+
+        .auth-card {
+            width: 100%;
+            max-width: 380px;
+            padding: 40px 28px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+.auth-logo { width: 100%; height: auto; margin-bottom: 32px; }
+        .auth-card h3 { font-size: 1.2rem; font-weight: 800; color: var(--text-dark); margin-bottom: 24px; align-self: flex-start; }
+
+        .form-group { width: 100%; margin-bottom: 18px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.875rem; color: var(--text-dark); margin-bottom: 7px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 13px 16px;
+            border: 1.5px solid var(--border); border-radius: 12px;
+            font-size: 0.95rem; outline: none; color: var(--text-mid);
+            font-family: inherit; background: var(--white);
+            transition: border-color .2s;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--maroon); }
+
+        .btn-primary {
+            width: 100%; padding: 14px;
+            background: var(--maroon); color: white;
+            border: none; border-radius: 12px;
+            font-size: 1rem; font-weight: 700; cursor: pointer;
+            font-family: inherit; transition: background .2s;
+            margin-top: 4px;
+        }
+        .btn-primary:hover { background: var(--maroon-dark); }
+
+        .auth-footer { margin-top: 28px; font-size: 0.9rem; color: var(--text-soft); text-align: center; }
+        .auth-footer a { color: var(--maroon); font-weight: 700; cursor: pointer; text-decoration: none; }
+
+        .error-msg { color:#7b2843; font-size: 0.78rem; margin-top: 6px; display: none; }
+        .success-msg { color: #10b981; font-size: 0.78rem; margin-top: 6px; display: none; }
+
+        /* ===================== HOME ===================== */
+        #homePage .phone { padding: 24px 20px 32px; align-items: center; }
+        .home-topbar { width: 100%; display: flex; justify-content: flex-end; margin-bottom: 4px; }
+        .icon-btn-round {
+            width: 42px; height: 42px; border-radius: 50%;
+            background: var(--maroon); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; cursor: pointer; border: none;
+            flex-shrink: 0;
+        }
+        .home-banner { width: 100%; height: auto; border-radius: 16px; margin-bottom: 18px; }
+        .home-tagline { font-size: 0.9rem; color: var(--text-mid); text-align: center; line-height: 1.65; font-weight: 500; margin-bottom: 18px; }
+        .home-divider { width: 70%; height: 1px; background: var(--border); margin: 0 auto 22px; }
+
+        .menu-list { width: 100%; display: flex; flex-direction: column; gap: 13px; margin-bottom: 32px; }
+        .menu-item {
+            display: flex; align-items: center;
+            padding: 16px 18px; border-radius: 18px;
+            border: 2px solid; text-decoration: none;
+            transition: transform .15s, box-shadow .15s;
+        }
+        .menu-item:active { transform: scale(.98); }
+        .menu-item.green { border-color: var(--green); }
+        .menu-item.maroon { border-color: var(--maroon); }
+        .menu-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; margin-right: 14px; flex-shrink: 0;
+        }
+        .menu-icon.green { background: var(--green-light); color: var(--green); }
+        .menu-icon.maroon { background: var(--maroon-light); color: var(--maroon); }
+        .menu-label h3 { font-size: 1rem; color: var(--text-dark); font-weight: 700; margin-bottom: 2px; }
+        .menu-label p { font-size: 0.8rem; color: var(--text-soft); }
+
+        .home-footer { width: 100%; border-top: 1px solid var(--border); padding-top: 18px; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+        .home-footer .info-row { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-soft); }
+        .home-footer .info-row i { color: var(--maroon); }
+
+        /* ===================== SHARED APP SHELL ===================== */
+        .app-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 20px; background: var(--white);
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .app-header h2 { font-size: 1rem; font-weight: 700; color: var(--text-dark); }
+        .back-btn-circle {
+            width: 36px; height: 36px; border-radius: 50%;
+            border: 1.5px solid var(--border); background: transparent;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-dark); cursor: pointer; font-size: 0.9rem;
+        }
+        .header-placeholder { width: 36px; }
+
+        .bottom-nav {
+            position: sticky; bottom: 0; width: 100%; background: var(--white);
+            display: flex; justify-content: space-around;
+            padding: 10px 0 14px; border-top: 1px solid var(--border);
+            z-index: 10;
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; text-decoration: none; color: var(--text-soft); font-size: 0.6rem; font-weight: 600; cursor: pointer; }
+        .nav-item i { font-size: 1.1rem; }
+        .nav-item.active { color: var(--maroon); }
+
+        /* ===================== PROFIL ===================== */
+        #profilPage .phone { overflow: hidden; }
+        .profil-scroll { flex: 1; overflow-y: auto; padding: 20px 20px 100px; }
+
+        .profil-top { text-align: center; padding: 10px 0 20px; }
+        .avatar-wrap { position: relative; width: 110px; height: 110px; margin: 0 auto 14px; }
+        .avatar-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); }
+        .camera-badge {
+            position: absolute; bottom: 4px; right: 4px;
+            background: var(--green); color: white;
+            width: 30px; height: 30px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2.5px solid white; font-size: 0.75rem;
+        }
+        .profil-name { font-size: 1.15rem; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+        .profil-badge { display: inline-block; background: var(--green-light); color: var(--green); padding: 4px 14px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; }
+        .leaf-sep { text-align: center; color: var(--green); margin: 18px 0; }
+
+        .field-group { margin-bottom: 18px; }
+        .field-group label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-dark); margin-bottom: 7px; }
+        .field-group label span { color: var(--maroon); }
+        .field-hint { font-size: 0.74rem; color: var(--text-soft); margin-top: 5px; }
+        .input-wrap { position: relative; border: 2px solid var(--green); border-radius: 12px; overflow: hidden; }
+        .input-wrap input, .input-wrap textarea {
+            width: 100%; padding: 12px 40px 12px 14px;
+            border: none; outline: none; font-size: 0.9rem;
+            font-family: inherit; color: var(--text-dark);
+            background: transparent; resize: none;
+        }
+        .input-wrap .edit-ico { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); color: var(--green); font-size: 0.8rem; pointer-events: none; }
+
+        .action-row { display: flex; gap: 12px; margin-top: 24px; }
+        .btn-cancel { flex: 1; padding: 12px; border-radius: 10px; font-weight: 700; background: white; color: var(--maroon); border: 1.5px solid var(--maroon); cursor: pointer; font-family: inherit; font-size: 0.9rem; }
+        .btn-save { flex: 1; padding: 12px; border-radius: 10px; font-weight: 700; background: var(--green); color: white; border: none; cursor: pointer; font-family: inherit; font-size: 0.9rem; }
+
+        /* ===================== PENGAJUAN ===================== */
+        .pengajuan-scroll { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 90px; }
+
+        .peng-topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+        .peng-topbar .logo-sm { height: 38px; }
+        .user-chip { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+        .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--maroon); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; }
+        .user-chip .user-text { font-size: 0.75rem; color: var(--text-soft); line-height: 1.4; }
+        .user-chip .user-text b { color: var(--text-dark); font-weight: 700; }
+
+        .peng-title-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 18px; }
+        .peng-icon { width: 46px; height: 46px; border-radius: 12px; background: var(--green-light); color: var(--green); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+        .peng-title-text h3 { font-size: 1rem; font-weight: 800; color: var(--text-dark); margin-bottom: 3px; }
+        .peng-title-text p { font-size: 0.78rem; color: var(--text-soft); }
+
+        /* Stat card */
+        .stat-card {
+            background: #fafafa; border: 1px solid var(--border);
+            border-radius: 14px; padding: 16px; margin-bottom: 18px;
+            display: flex; align-items: center; gap: 14px;
+        }
+        .stat-icon { width: 42px; height: 42px; background: white; border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--green); font-size: 1.1rem; flex-shrink: 0; }
+        .stat-label p { font-weight: 700; font-size: 0.85rem; color: var(--text-dark); }
+        .stat-label small { font-size: 0.74rem; color: var(--text-soft); }
+        .stat-count { margin-left: auto; text-align: right; }
+        .stat-count h2 { font-size: 1.6rem; font-weight: 800; color: var(--maroon); white-space: nowrap; }
+        .stat-count h2 span { font-size: 0.8rem; font-weight: 600; }
+        .stat-pills { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; margin-top: 4px; }
+        .pill { display: flex; align-items: center; gap: 4px; font-size: 0.68rem; color: var(--text-soft); white-space: nowrap; }
+        .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+
+        /* Form section */
+        .form-box { border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+        .form-box-header { border-left: 4px solid var(--maroon); padding-left: 12px; margin-bottom: 20px; }
+        .form-box-header h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); }
+
+        .peng-field { margin-bottom: 16px; }
+        .peng-field label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+        .peng-field input, .peng-field select, .peng-field textarea {
+            width: 100%; padding: 11px 14px;
+            border: 1.5px solid var(--border); border-radius: 10px;
+            font-size: 0.875rem; font-family: inherit; color: var(--text-mid);
+            outline: none; background: var(--white); transition: border-color .2s;
+        }
+        .peng-field input:focus, .peng-field select:focus, .peng-field textarea:focus { border-color: var(--green); }
+        .peng-field input:disabled { background: #f8fafc; color: var(--text-soft); }
+        .peng-field .field-hint { font-size: 0.73rem; color: var(--text-soft); margin-top: 4px; }
+
+        .peng-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .rp-wrap { position: relative; }
+        .rp-wrap .rp-prefix { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--text-soft); font-size: 0.875rem; font-weight: 600; pointer-events: none; }
+        .rp-wrap input { padding-left: 38px; }
+
+        .info-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 14px; display: flex; gap: 12px; margin: 18px 0; }
+        .info-box i { color: #f59e0b; margin-top: 2px; flex-shrink: 0; }
+        .info-box p { font-size: 0.8rem; color: #78350f; line-height: 1.55; }
+        .info-box strong { font-weight: 700; }
+
+        .btn-submit-peng {
+            width: 100%; padding: 14px;
+            background: var(--maroon); color: white;
+            border: none; border-radius: 12px;
+            font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; font-family: inherit;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: background .2s;
+        }
+        .btn-submit-peng:hover { background: var(--maroon-dark); }
+
+        /* ===================== PEMBAYARAN ===================== */
+        .pem-scroll { flex: 1; overflow-y: auto; padding-bottom: 90px; }
+        .pem-banner img { width: 100%; display: block; }
+        .pem-section { padding: 0 20px; }
+
+        .loan-card { border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin: 16px 20px; }
+        .loan-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .loan-row .loan-label { font-size: 0.8rem; color: var(--text-soft); margin-bottom: 3px; }
+        .loan-row .loan-val { font-size: 1.05rem; font-weight: 800; color: var(--text-dark); }
+        .timer-badge { background: #fff4e6; color: #d97706; padding: 5px 11px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+        .progress-track { background: var(--border); height: 8px; border-radius: 10px; overflow: hidden; margin: 12px 0 8px; }
+        .progress-fill { height: 100%; background: var(--green); border-radius: 10px; }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 0.74rem; }
+        .progress-labels span:first-child { color: var(--green); font-weight: 600; }
+
+        .bill-card { margin: 0 20px 16px; padding: 16px; background: #fff9f0; border: 1px solid #fde68a; border-radius: 14px; display: flex; align-items: center; gap: 12px; }
+        .bill-ico { width: 42px; height: 42px; background: var(--green-light); color: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .bill-info { flex: 1; }
+        .bill-info p { font-weight: 700; font-size: 0.9rem; color: var(--text-dark); }
+        .bill-info small { font-size: 0.74rem; color: var(--maroon); font-weight: 600; }
+        .bill-amount { font-size: 1rem; font-weight: 800; color: var(--maroon); white-space: nowrap; }
+
+        .section-label { font-size: 0.78rem; font-weight: 800; color: var(--text-dark); margin: 0 20px 10px; }
+        .detail-row { display: flex; justify-content: space-between; margin: 0 20px 8px; font-size: 0.85rem; color: var(--text-mid); }
+        .detail-row.total { font-weight: 800; }
+        .detail-row.total span:last-child { color: var(--maroon); }
+        .pem-divider { height: 1px; background: var(--border); margin: 14px 20px; }
+
+        .methods-wrap { margin: 0 20px 20px; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+        .method-item { display: flex; align-items: center; padding: 14px 16px; gap: 12px; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .method-item:last-child { border-bottom: none; }
+        .method-radio { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .method-radio.selected { border-color: var(--maroon); }
+        .method-radio.selected::after { content: ''; width: 10px; height: 10px; background: var(--maroon); border-radius: 50%; }
+        .method-ico { width: 36px; height: 36px; background: var(--green-light); color: var(--green); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .method-text p { font-weight: 700; font-size: 0.875rem; color: var(--text-dark); }
+        .method-text small { font-size: 0.72rem; color: var(--text-soft); }
+
+        .btn-pay { display: block; margin: 0 20px 12px; padding: 15px; background: var(--maroon); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 700; cursor: pointer; font-family: inherit; width: calc(100% - 40px); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .safe-label { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 0 20px 20px; padding: 11px; background: #f0fdf4; border-radius: 10px; font-size: 0.78rem; color: var(--green); font-weight: 600; }
+
+        /* ===================== RIWAYAT ===================== */
+        .riwayat-scroll { flex: 1; overflow-y: auto; padding-bottom: 90px; }
+        .summary-strip { display: flex; align-items: center; gap: 12px; margin: 16px 20px; padding: 16px; border: 1px solid var(--border); border-radius: 14px; }
+        .summary-ico { width: 42px; height: 42px; background: var(--green-light); color: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .summary-stat { flex: 1; }
+        .summary-stat p { font-size: 0.75rem; color: var(--text-soft); margin-bottom: 2px; }
+        .summary-stat h4 { font-weight: 800; font-size: 0.95rem; color: var(--text-dark); }
+        .summary-stat h4.accent { color: var(--maroon); }
+        .summary-sep { width: 1px; height: 36px; background: var(--border); }
+
+        .txn-list { display: flex; flex-direction: column; gap: 12px; padding: 0 20px; }
+        .txn-card { border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+        .txn-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; }
+        .badge-lunas { background: #ecfdf5; color: #10b981; }
+        .badge-berjalan { background: #fffbeb; color: #f59e0b; }
+        .txn-date { font-size: 0.74rem; color: var(--text-soft); }
+        .txn-body { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .txn-title { font-weight: 700; font-size: 0.9rem; color: var(--text-dark); margin-bottom: 2px; }
+        .txn-id { font-size: 0.7rem; color: var(--text-soft); }
+        .txn-amount { font-weight: 800; font-size: 0.95rem; color: var(--text-dark); }
+        .txn-foot { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-soft); border-top: 1px solid var(--border); padding-top: 10px; }
+        .txn-foot .status-lunas { color: #10b981; font-weight: 600; }
+
+        .empty-state { text-align: center; padding: 32px 20px; color: var(--text-soft); }
+        .empty-state i { font-size: 2.5rem; margin-bottom: 10px; opacity: .4; display: block; }
+        .empty-state p { font-size: 0.85rem; line-height: 1.6; }
+
+        /* ===================== KTP UPLOAD ===================== */
+        .ktp-upload-label {
+            display: block; font-weight: 600; font-size: 0.875rem;
+            color: var(--text-dark); margin-bottom: 7px;
+        }
+        .ktp-upload-label span { color: var(--maroon); }
+        .ktp-drop-zone {
+            width: 100%; border: 2px dashed var(--border);
+            border-radius: 12px; padding: 20px 16px;
+            text-align: center; cursor: pointer;
+            transition: border-color .2s, background .2s;
+            background: #fafafa; position: relative; overflow: hidden;
+        }
+        .ktp-drop-zone:hover, .ktp-drop-zone.dragover { border-color: var(--maroon); background: var(--maroon-light); }
+        .ktp-drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+        .ktp-drop-icon { font-size: 2rem; color: var(--maroon); margin-bottom: 8px; }
+        .ktp-drop-text { font-size: 0.82rem; color: var(--text-soft); line-height: 1.5; }
+        .ktp-drop-text strong { color: var(--maroon); }
+        .ktp-preview-wrap { display: none; position: relative; width: 100%; border-radius: 10px; overflow: hidden; }
+        .ktp-preview-wrap img { width: 100%; height: auto; display: block; border-radius: 10px; }
+        .ktp-preview-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,.45);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity .2s;
+        }
+        .ktp-preview-wrap:hover .ktp-preview-overlay { opacity: 1; }
+        .ktp-change-btn {
+            background: white; color: var(--maroon); border: none;
+            padding: 8px 16px; border-radius: 20px; font-size: 0.8rem;
+            font-weight: 700; cursor: pointer; font-family: inherit;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .ktp-hint { font-size: 0.72rem; color: var(--text-soft); margin-top: 6px; }
+        .ktp-badge-ok { display: none; align-items: center; gap: 6px; font-size: 0.78rem; color: #10b981; font-weight: 600; margin-top: 6px; }
+        .ktp-drop-zone.error { border-color: #7b2843; background: #fef2f2; }
+        .ktp-error-msg { display: none; color: #7b2843; font-size: 0.78rem; margin-top: 6px; font-weight: 600; }
+        .ktp-error-msg.show { display: flex; align-items: center; gap: 5px; }
+
+        /* ===================== LOGOUT MODAL ===================== */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,.5); z-index: 100;
+            align-items: flex-end; justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-sheet {
+            background: white; border-radius: 24px 24px 0 0;
+            padding: 28px 24px 36px; width: 100%; max-width: 430px;
+            animation: slideUp .25s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 4px; margin: 0 auto 20px; }
+        .modal-icon { width: 60px; height: 60px; border-radius: 50%; background: #fef2f2; color: #7b2843; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 16px; }
+        .modal-title { text-align: center; font-size: 1.05rem; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+        .modal-desc { text-align: center; font-size: 0.85rem; color: var(--text-soft); margin-bottom: 24px; line-height: 1.55; }
+        .modal-btns { display: flex; gap: 12px; }
+        .modal-btn-cancel { flex: 1; padding: 13px; border-radius: 12px; border: 1.5px solid var(--border); background: white; font-weight: 700; font-size: 0.9rem; color: var(--text-dark); cursor: pointer; font-family: inherit; }
+        .modal-btn-logout { flex: 1; padding: 13px; border-radius: 12px; border: none; background: #7b2843; color: white; font-weight: 700; font-size: 0.9rem; cursor: pointer; font-family: inherit; }
+
+        /* Logout btn in profil */
+        .btn-logout {
+            width: 100%; padding: 13px; border-radius: 12px;
+            border: 1.5px solid #7b2843; background: white;
+            color: #7b2843;; font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; font-family: inherit; margin-top: 16px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-logout:hover { background: #fef2f2; }
+        /* ===================== TOAST NOTIFICATION ===================== */
+        .toast-msg {
+            position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: #1e293b; color: white; padding: 12px 22px;
+            border-radius: 12px; font-size: 0.85rem; font-weight: 600;
+            white-space: nowrap; z-index: 200; opacity: 0;
+            transition: opacity .3s, transform .3s; pointer-events: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,.2);
+        }
+        .toast-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast-msg.success { background: #0a5d4a; }
+        .toast-msg.error { background: #7b2843; }
+        .toast-msg.info { background: #334155; }
+    </style>
+</head>
+<body>
+
+<!-- ===================== LOGIN ===================== -->
+<div id="loginPage" class="page active">
+    <div class="auth-card">
+        <img src="bumdes.png" alt="Logo Subur Jaya" class="auth-logo">
+        <form id="loginForm" style="width:100%">
+            <div class="form-group"><label>NIK/KTP</label><input type="text" id="nik" placeholder="Masukkan NIK/KTP" required></div>
+            <div class="form-group"><label>Password</label><input type="password" id="password" placeholder="Masukkan password" required></div>
+            <div id="loginError" class="error-msg">NIK atau password salah! Belum punya akun? Silakan daftar.</div>
+            <button type="submit" class="btn-primary">Login</button>
+        </form>
+        <div class="auth-footer">Belum punya akun? <a id="keDaftarBtn">Daftar di sini</a></div>
+    </div>
+</div>
+
+<!-- ===================== DAFTAR ===================== -->
+<div id="daftarPage" class="page">
+    <div class="auth-card">
+        <img src="bumdes.png" alt="Logo Subur Jaya" class="auth-logo">
+        <h3>Daftar Akun Baru</h3>
+        <form id="daftarForm" style="width:100%">
+            <div class="form-group"><label>Nama Lengkap</label><input type="text" id="daftarNama" placeholder="Masukkan nama lengkap" required></div>
+            <div class="form-group"><label>NIK/KTP</label><input type="text" id="daftarNik" placeholder="Masukkan NIK/KTP (16 digit)" required></div>
+            <div class="form-group"><label>Alamat</label><input type="text" id="daftarAlamat" placeholder="Masukkan alamat" required></div>
+            <div class="form-group"><label>Pekerjaan</label>
+                <select id="daftarPekerjaan" required>
+                    <option value="">Pilih pekerjaan</option>
+                    <option>Petani</option><option>Pedagang</option><option>Peternak</option>
+                    <option>Nelayan</option><option>PNS/TNI/Polri</option><option>Swasta</option><option>Lainnya</option>
+                </select>
+            </div>
+            <!-- Upload KTP -->
+            <div class="form-group">
+                <label class="ktp-upload-label">Foto KTP <span>*</span></label>
+                <div class="ktp-drop-zone" id="ktpDropZone">
+                    <input type="file" id="ktpFileInput" accept="image/*" capture="environment">
+                    <div id="ktpPlaceholder">
+                        <div class="ktp-drop-icon"><i class="fa-regular fa-id-card"></i></div>
+                        <div class="ktp-drop-text"><strong>Ketuk untuk unggah foto KTP</strong><br>Format JPG, PNG — maks. 5MB</div>
+                    </div>
+                    <div class="ktp-preview-wrap" id="ktpPreviewWrap">
+                        <img id="ktpPreviewImg" src="" alt="Preview KTP">
+                        <div class="ktp-preview-overlay">
+                            <button type="button" class="ktp-change-btn" id="ktpChangeBtn"><i class="fa-solid fa-rotate"></i> Ganti Foto</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ktp-badge-ok" id="ktpBadgeOk"><i class="fa-solid fa-circle-check"></i> Foto KTP berhasil diunggah</div>
+                <div class="ktp-error-msg" id="ktpErrorMsg"><i class="fa-solid fa-triangle-exclamation"></i> Foto KTP wajib diunggah sebelum mendaftar!</div>
+                <p class="ktp-hint">Pastikan foto jelas dan tidak buram. Foto ini akan digunakan sebagai foto profil Anda.</p>
+            </div>
+            <div class="form-group"><label>Password</label><input type="password" id="daftarPassword" placeholder="Minimal 6 karakter" required></div>
+            <div class="form-group"><label>Konfirmasi Password</label><input type="password" id="daftarConfirm" placeholder="Ulangi password" required></div>
+            <div id="daftarError" class="error-msg"></div>
+            <div id="daftarSuccess" class="success-msg">Pendaftaran berhasil! Silakan login.</div>
+            <button type="submit" class="btn-primary">Daftar</button>
+        </form>
+        <div class="auth-footer">Sudah punya akun? <a id="keLoginBtn">Login di sini</a></div>
+    </div>
+</div>
+
+<!-- ===================== HOME ===================== -->
+<div id="homePage" class="page">
+    <div class="phone">
+        <div class="home-topbar">
+            <button class="icon-btn-round" id="homeProfileBtn"><i class="fa-regular fa-user"></i></button>
+        </div>
+        <img src="home bm.png" alt="BUMDes Bulu Logo" class="home-banner">
+        <p class="home-tagline" id="sapaanUser">BUMDes hadir untuk membantu kebutuhan masyarakat dengan layanan yang mudah, cepat, dan terpercaya.</p>
+        <div class="home-divider"></div>
+        <div class="menu-list">
+            <a href="#" class="menu-item green" id="menuPengajuan">
+                <div class="menu-icon green"><i class="fa-regular fa-file-lines"></i></div>
+                <div class="menu-label"><h3>Pengajuan Pinjaman</h3><p>Ajukan pinjaman baru</p></div>
+            </a>
+            <a href="#" class="menu-item maroon" id="menuPembayaran">
+                <div class="menu-icon maroon"><i class="fa-regular fa-credit-card"></i></div>
+                <div class="menu-label"><h3>Pembayaran Angsuran</h3><p>Bayar cicilan pinjaman</p></div>
+            </a>
+            <a href="#" class="menu-item green" id="menuRiwayat">
+                <div class="menu-icon green"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                <div class="menu-label"><h3>Riwayat Transaksi</h3><p>Lihat riwayat transaksi</p></div>
+            </a>
+        </div>
+        <div class="home-footer">
+            <div class="info-row"><i class="fa-solid fa-location-dot" style="color: #0a5d4a;"></i><span>BUMDes Bulu, Desa Bulu, Balen, Bojonegoro</span></div>
+            <div class="info-row"><i class="fa-brands fa-whatsapp" style="color: #0a5d4a;"></i><span>0851-2345-6789 (WhatsApp)</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== PROFIL ===================== -->
+<div id="profilPage" class="page">
+    <div class="phone">
+        <div class="app-header">
+            <button class="back-btn-circle" id="profilBackBtn"><i class="fa-solid fa-arrow-left"></i></button>
+            <h2>Profil</h2>
+            <span style="color:var(--maroon); font-weight:700; font-size:0.85rem; cursor:pointer;">Edit</span>
+        </div>
+        <div class="profil-scroll">
+            <div class="profil-top">
+                <div class="avatar-wrap">
+                    <img id="profilAvatar" src="pp.png" alt="Foto Profil">
+                    <div class="camera-badge"><i class="fa-solid fa-camera"></i></div>
+                </div>
+                <div class="profil-name" id="profilNama">Budi Santoso</div>
+                <span class="profil-badge">Anggota BUMDes</span>
+            </div>
+            <div class="leaf-sep"><i class="fa-solid fa-leaf"></i></div>
+            <div class="field-group">
+                <label>Nama Lengkap <span>*</span></label>
+                <div class="input-wrap"><input type="text" id="profilInputNama" value="Budi Santoso"><i class="fa-solid fa-pencil edit-ico"></i></div>
+                <p class="field-hint">Nama akan ditampilkan di aplikasi BUMDes Bulu.</p>
+            </div>
+            <div class="field-group">
+                <label>Alamat <span>*</span></label>
+                <div class="input-wrap"><textarea id="profilInputAlamat" rows="3">Dusun Wonosari, Desa Bulu, Kecamatan Balen, Kabupaten Bojonegoro</textarea><i class="fa-solid fa-pencil edit-ico" style="top:16px; transform:none;"></i></div>
+                <p class="field-hint">Alamat sesuai KTP atau domisili.</p>
+            </div>
+            <div class="field-group">
+                <label>Pekerjaan <span>*</span></label>
+                <div class="input-wrap"><input type="text" id="profilInputPekerjaan" value="Petani"><i class="fa-solid fa-pencil edit-ico"></i></div>
+                <p class="field-hint">Pilih pekerjaan utama Anda.</p>
+            </div>
+            <div class="action-row">
+                <button class="btn-cancel" id="profilBatalBtn">Batal</button>
+                <button class="btn-save" id="profilSimpanBtn">Simpan</button>
+            </div>
+            <button class="btn-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Keluar / Logout</button>
+        </div>
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item" id="navHomeFromProfil"><i class="fa-solid fa-house"></i>Beranda</a>
+            <a href="#" class="nav-item" id="navPengajuanFromProfil"><i class="fa-regular fa-file-lines"></i>Pengajuan</a>
+            <a href="#" class="nav-item" id="navPembayaranFromProfil"><i class="fa-regular fa-credit-card"></i>Pembayaran</a>
+            <a href="#" class="nav-item" id="navRiwayatFromProfil"><i class="fa-solid fa-clock-rotate-left"></i>Riwayat</a>
+            <a href="#" class="nav-item active"><i class="fa-solid fa-user"></i>Profil</a>
+        </nav>
+    </div>
+</div>
+
+<!-- ===================== PENGAJUAN ===================== -->
+<div id="pengajuanPage" class="page">
+    <div class="phone">
+        <div class="app-header">
+            <button class="back-btn-circle" id="backHomeFromPengajuan"><i class="fa-solid fa-arrow-left"></i></button>
+            <h2>Pengajuan Pinjaman</h2>
+            <div class="header-placeholder"></div>
+        </div>
+        <div class="pengajuan-scroll">
+            <!-- Topbar user info -->
+            <div class="peng-topbar">
+                <img src="home bm.png" alt="Logo" class="logo-sm">
+                <div class="user-chip">
+                    <div class="user-avatar">U</div>
+                    <div class="user-text">Selamat datang,<br><b id="pengajuanUserName">User</b></div>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <div class="peng-title-row">
+                <div class="peng-icon"><i class="fa-regular fa-file-lines"></i></div>
+                <div class="peng-title-text">
+                    <h3>Pengajuan Peminjaman</h3>
+                    <p>Ajukan peminjaman untuk kebutuhan usaha atau modal kerja.</p>
+                </div>
+            </div>
+
+            <!-- Stat -->
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-regular fa-file-lines"></i></div>
+                <div class="stat-label">
+                    <p>Total Pengajuan</p>
+                    <small>Sepanjang tahun 2025</small>
+                </div>
+                <div class="stat-count">
+                    <h2>12 <span>Pengajuan</span></h2>
+                    <div class="stat-pills">
+                        <span class="pill"><span class="dot" style="background:#10b981"></span> 8 Disetujui</span>
+                        <span class="pill"><span class="dot" style="background:#3b82f6"></span> 2 Menunggu</span>
+                        <span class="pill"><span class="dot" style="background:#ef4444"></span> 2 Ditolak</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div class="form-box">
+                <div class="form-box-header"><h4>Formulir Pengajuan Peminjaman</h4></div>
+                <form id="loanForm">
+                    <div class="peng-field">
+                        <label>Nama Lengkap</label>
+                        <input type="text" id="pengajuanNama" placeholder="Masukkan nama lengkap">
+                    </div>
+                    <div class="peng-field">
+                        <label>Pekerjaan / Usaha</label>
+                        <input type="text" id="pengajuanPekerjaan" placeholder="Contoh: Petani, Pedagang, UMKM">
+                    </div>
+                    <div class="peng-field">
+                        <label>Jumlah Pinjaman (Rp)</label>
+                        <div class="rp-wrap">
+                            <span class="rp-prefix">Rp</span>
+                            <input type="number" id="pengajuanJumlah" placeholder="0">
+                        </div>
+                        <p class="field-hint">Minimal Rp 100.000</p>
+                    </div>
+                    <div class="peng-field">
+                        <label>Keperluan Peminjaman</label>
+                        <textarea id="pengajuanKeperluan" rows="3" placeholder="Contoh: Modal usaha, beli bahan baku, kebutuhan pertanian, dll"></textarea>
+                    </div>
+                    <div class="peng-row-2">
+                        <div class="peng-field">
+                            <label>Lama Cicilan</label>
+                            <select id="pengajuanTenor">
+                                <option>Pilih cicilan</option>
+                                <option>3 Bulan</option>
+                                <option>6 Bulan</option>
+                                <option>12 Bulan</option>
+                            </select>
+                            <p class="field-hint">Maks. 12 bulan</p>
+                        </div>
+                        <div class="peng-field">
+                            <label>Est. Angsuran/Bulan</label>
+                            <input type="text" id="perkiraanAngsuran" placeholder="Rp 0" disabled>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <p><strong>Syarat Pengajuan</strong><br>Fotokopi KTP • KK • Usaha aktif min. 3 bulan • Tidak ada tunggakan</p>
+                    </div>
+                    <button type="submit" class="btn-submit-peng" style="background-color: #0a5d4a;"><i class="fa-regular fa-paper-plane"></i> Kirim Pengajuan</button>
+                </form>
+            </div>
+        </div>
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item" id="navHomePengajuan"><i class="fa-solid fa-house"></i>Beranda</a>
+            <a href="#" class="nav-item active"><i class="fa-regular fa-file-lines"></i>Pengajuan</a>
+            <a href="#" class="nav-item" id="navPembayaranPengajuan"><i class="fa-regular fa-credit-card"></i>Pembayaran</a>
+            <a href="#" class="nav-item" id="navRiwayatPengajuan"><i class="fa-solid fa-clock-rotate-left"></i>Riwayat</a>
+            <a href="#" class="nav-item" id="navProfilPengajuan"><i class="fa-solid fa-user"></i>Profil</a>
+        </nav>
+    </div>
+</div>
+
+<!-- ===================== PEMBAYARAN ===================== -->
+<div id="pembayaranPage" class="page">
+    <div class="phone">
+        <div class="app-header">
+            <button class="back-btn-circle" id="backHomeFromPembayaran"><i class="fa-solid fa-arrow-left"></i></button>
+            <h2>Pembayaran Angsuran</h2>
+            <div class="header-placeholder"></div>
+        </div>
+        <div class="pem-scroll">
+            <div class="pem-banner"><img src="pembayaran_ft.png" alt=""></div>
+            <div class="loan-card">
+                <div class="loan-row">
+                    <div><p class="loan-label">Sisa Pinjaman</p><p class="loan-val">Rp 5.500.000</p></div>
+                    <span class="timer-badge"><i class="fa-regular fa-clock"></i> 6 Bulan Lagi</span>
+                </div>
+                <div class="progress-track"><div class="progress-fill" style="width:50%"></div></div>
+                <div class="progress-labels"><span>6 / 12 Cicilan</span><span style="color:var(--text-soft)">50% Lunas</span></div>
+            </div>
+            <div class="bill-card">
+                <div class="bill-ico"><i class="fa-regular fa-calendar-check"></i></div>
+                <div class="bill-info"><p>Tagihan Bulan Ini</p><small>Jatuh tempo: 10 Mei 2025</small></div>
+                <span class="bill-amount">Rp 550.000</span>
+            </div>
+            <p class="section-label">Rincian Pembayaran</p>
+            <div class="detail-row"><span>Angsuran Pokok</span><span>Rp 450.000</span></div>
+            <div class="detail-row"><span>Bunga/Margin</span><span>Rp 100.000</span></div>
+            <div class="pem-divider"></div>
+            <div class="detail-row total"><span>Total Bayar</span><span>Rp 550.000</span></div>
+            <p class="section-label" style="margin-top:20px">Metode Pembayaran</p>
+            <div class="methods-wrap">
+                <div class="method-item">
+                    <div class="method-radio selected"></div>
+                    <div class="method-ico"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                    <div class="method-text"><p>Bayar Tunai</p><small>Datang ke kantor BUMDes</small></div>
+                </div>
+                <div class="method-item">
+                    <div class="method-radio"></div>
+                    <div class="method-ico"><i class="fa-solid fa-building-columns"></i></div>
+                    <div class="method-text"><p>Transfer Bank</p><small>Manual / Kode VA</small></div>
+                </div>
+            </div>
+            <button class="btn-pay" style="background-color: #0a5d4a;" id="bayarSekarangBtn"><i class="fa-regular fa-paper-plane"></i> Bayar Sekarang</button>
+            <div class="safe-label"><i class="fa-solid fa-lock"></i> Pembayaran aman &amp; tercatat</div>
+        </div>
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item" id="navHomePembayaran"><i class="fa-solid fa-house"></i>Beranda</a>
+            <a href="#" class="nav-item" id="navPengajuanPembayaran"><i class="fa-regular fa-file-lines"></i>Pengajuan</a>
+            <a href="#" class="nav-item active"><i class="fa-regular fa-credit-card"></i>Pembayaran</a>
+            <a href="#" class="nav-item" id="navRiwayatPembayaran"><i class="fa-solid fa-clock-rotate-left"></i>Riwayat</a>
+            <a href="#" class="nav-item" id="navProfilPembayaran"><i class="fa-solid fa-user"></i>Profil</a>
+        </nav>
+    </div>
+</div>
+
+<!-- ===================== RIWAYAT ===================== -->
+<div id="riwayatPage" class="page">
+    <div class="phone">
+        <div class="app-header">
+            <button class="back-btn-circle" id="backHomeFromRiwayat"><i class="fa-solid fa-arrow-left"></i></button>
+            <h2>Riwayat Transaksi</h2>
+            <i class="fa-regular fa-file-lines" style="color:var(--text-soft)"></i>
+        </div>
+        <div class="riwayat-scroll">
+            <div class="pem-banner"><img src="pembayaran_ft.png" alt=""></div>
+            <div class="summary-strip">
+                <div class="summary-ico"><i class="fa-regular fa-file-lines"></i></div>
+                <div class="summary-stat"><p>Total Peminjaman</p><h4 class="accent">5 Kali</h4></div>
+                <div class="summary-sep"></div>
+                <div class="summary-stat"><p>Total Nominal</p><h4>Rp 23.500.000</h4></div>
+            </div>
+            <p class="section-label">Daftar Transaksi</p>
+            <div class="txn-list">
+                <div class="txn-card">
+                    <div class="txn-head">
+                        <span class="badge badge-lunas"><i class="fa-regular fa-circle-check"></i> Lunas</span>
+                        <span class="txn-date">10 Apr 2025</span>
+                    </div>
+                    <div class="txn-body">
+                        <div><p class="txn-title">Pinjaman Usaha Tani</p><p class="txn-id">#PJ-202504-001</p></div>
+                        <span class="txn-amount">Rp 5.000.000</span>
+                    </div>
+                    <div class="txn-foot"><span>6 Bulan • Cicilan Rp 850.000</span><span class="status-lunas">Lunas 12 Mei 2025</span></div>
+                </div>
+                <div class="txn-card">
+                    <div class="txn-head">
+                        <span class="badge badge-berjalan"><i class="fa-regular fa-clock"></i> Berjalan</span>
+                        <span class="txn-date">15 Jan 2025</span>
+                    </div>
+                    <div class="txn-body">
+                        <div><p class="txn-title">Modal Dagang</p><p class="txn-id">#PJ-202501-003</p></div>
+                        <span class="txn-amount">Rp 8.000.000</span>
+                    </div>
+                    <div class="txn-foot"><span>12 Bulan • Cicilan Rp 720.000</span><span>Sisa 4 Cicilan</span></div>
+                </div>
+            </div>
+            <div class="empty-state">
+                <i class="fa-regular fa-file-zipper"></i>
+                <p>Tidak ada transaksi lainnya<br><span style="font-size:0.72rem">Riwayat akan muncul setelah ada pengajuan baru</span></p>
+            </div>
+        </div>
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item" id="navHomeRiwayat"><i class="fa-solid fa-house"></i>Beranda</a>
+            <a href="#" class="nav-item" id="navPengajuanRiwayat"><i class="fa-regular fa-file-lines"></i>Pengajuan</a>
+            <a href="#" class="nav-item" id="navPembayaranRiwayat"><i class="fa-regular fa-credit-card"></i>Pembayaran</a>
+            <a href="#" class="nav-item active"><i class="fa-solid fa-clock-rotate-left"></i>Riwayat</a>
+            <a href="#" class="nav-item" id="navProfilRiwayat"><i class="fa-solid fa-user"></i>Profil</a>
+        </nav>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-msg" id="toastMsg"></div>
+
+<!-- ===================== LOGOUT MODAL ===================== -->
+<div class="modal-overlay" id="logoutModal">
+    <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
+        <div class="modal-title">Keluar dari Akun?</div>
+        <div class="modal-desc">Anda akan keluar dari aplikasi BUMDes Subur Jaya. Pastikan data Anda sudah tersimpan sebelum keluar.</div>
+        <div class="modal-btns">
+            <button class="modal-btn-cancel" id="logoutCancelBtn">Batal</button>
+            <button class="modal-btn-logout" id="logoutConfirmBtn"><i class="fa-solid fa-right-from-bracket"></i> Ya, Keluar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let users = JSON.parse(localStorage.getItem('bumdes_users')) || [];
+    let currentUser = null;
+    let ktpBase64 = null; // temp storage for upload
+
+    function saveUsers() { localStorage.setItem('bumdes_users', JSON.stringify(users)); }
+    function isNikRegistered(nik) { return users.some(u => u.nik === nik); }
+
+    function registerUser(nama, nik, alamat, pekerjaan, password, ktpPhoto) {
+        if (isNikRegistered(nik)) return { success: false, message: 'NIK sudah terdaftar! Silakan login.' };
+        if (password.length < 6) return { success: false, message: 'Password minimal 6 karakter!' };
+        users.push({ nama, nik, alamat, pekerjaan, password, foto: ktpPhoto || null });
+        saveUsers();
+        return { success: true };
+    }
+
+    function loginUser(nik, password) {
+        const user = users.find(u => u.nik === nik && u.password === password);
+        return user ? { success: true, user } : { success: false };
+    }
+
+    function updateCurrentUserProfile(nama, alamat, pekerjaan) {
+        if (!currentUser) return;
+        currentUser.nama = nama; currentUser.alamat = alamat; currentUser.pekerjaan = pekerjaan;
+        const i = users.findIndex(u => u.nik === currentUser.nik);
+        if (i !== -1) { users[i] = currentUser; saveUsers(); }
+        updateProfileDisplay();
+    }
+
+    function updateProfileDisplay() {
+        if (!currentUser) return;
+        document.getElementById('sapaanUser').innerHTML = `Selamat datang, <b>${currentUser.nama}</b>! BUMDes hadir untuk membantu kebutuhan masyarakat dengan layanan yang mudah, cepat, dan terpercaya.`;
+        document.getElementById('profilNama').innerText = currentUser.nama;
+        document.getElementById('profilInputNama').value = currentUser.nama;
+        document.getElementById('profilInputAlamat').value = currentUser.alamat || '';
+        document.getElementById('profilInputPekerjaan').value = currentUser.pekerjaan || '';
+        document.getElementById('pengajuanUserName').innerText = currentUser.nama;
+        document.getElementById('pengajuanNama').value = currentUser.nama;
+        document.getElementById('pengajuanPekerjaan').value = currentUser.pekerjaan || '';
+        // Update avatar foto dari KTP
+        const avatarEl = document.getElementById('profilAvatar');
+        if (currentUser.foto) {
+            avatarEl.src = currentUser.foto;
+        } else {
+            avatarEl.src = 'pp.png';
+        }
+    }
+
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0, 0);
+        if (['homePage','profilPage','pengajuanPage'].includes(id)) updateProfileDisplay();
+    }
+
+    // ---- KTP Upload Logic ----
+    const ktpInput = document.getElementById('ktpFileInput');
+    const ktpDropZone = document.getElementById('ktpDropZone');
+    const ktpPlaceholder = document.getElementById('ktpPlaceholder');
+    const ktpPreviewWrap = document.getElementById('ktpPreviewWrap');
+    const ktpPreviewImg = document.getElementById('ktpPreviewImg');
+    const ktpBadgeOk = document.getElementById('ktpBadgeOk');
+    const ktpErrorMsg = document.getElementById('ktpErrorMsg');
+    const ktpChangeBtn = document.getElementById('ktpChangeBtn');
+
+    function handleKtpFile(file) {
+        if (!file || !file.type.startsWith('image/')) return;
+        if (file.size > 5 * 1024 * 1024) { alert('Ukuran file terlalu besar. Maks. 5MB.'); return; }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            ktpBase64 = e.target.result;
+            ktpPreviewImg.src = ktpBase64;
+            ktpPlaceholder.style.display = 'none';
+            ktpPreviewWrap.style.display = 'block';
+            ktpBadgeOk.style.display = 'flex';
+            // Clear error state
+            ktpDropZone.classList.remove('error');
+            ktpErrorMsg.classList.remove('show');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    ktpInput.addEventListener('change', function() { if (this.files && this.files[0]) handleKtpFile(this.files[0]); });
+    ktpChangeBtn.addEventListener('click', function(e) { e.stopPropagation(); ktpInput.value = ''; ktpInput.click(); });
+    ktpDropZone.addEventListener('dragover', e => { e.preventDefault(); ktpDropZone.classList.add('dragover'); });
+    ktpDropZone.addEventListener('dragleave', () => ktpDropZone.classList.remove('dragover'));
+    ktpDropZone.addEventListener('drop', function(e) {
+        e.preventDefault(); ktpDropZone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0]; if (file) handleKtpFile(file);
+    });
+
+    // Login
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const r = loginUser(document.getElementById('nik').value.trim(), document.getElementById('password').value);
+        if (r.success) {
+    currentUser = r.user;
+
+    // SIMPAN LOGIN
+    localStorage.setItem('currentUser', JSON.stringify(r.user));
+
+    updateProfileDisplay();
+    showPage('homePage');
+}
+        else document.getElementById('loginError').style.display = 'block';
+    });
+
+    // Daftar
+    document.getElementById('daftarForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const pw = document.getElementById('daftarPassword').value;
+        const cf = document.getElementById('daftarConfirm').value;
+        const errEl = document.getElementById('daftarError');
+        const sucEl = document.getElementById('daftarSuccess');
+        errEl.style.display = 'none'; sucEl.style.display = 'none';
+
+        // Validasi KTP wajib - highlight zona upload
+        if (!ktpBase64) {
+            ktpDropZone.classList.add('error');
+            ktpErrorMsg.classList.add('show');
+            ktpDropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+        if (pw !== cf) { errEl.innerText = 'Konfirmasi password tidak cocok!'; errEl.style.display = 'block'; return; }
+        const r = registerUser(
+            document.getElementById('daftarNama').value.trim(),
+            document.getElementById('daftarNik').value.trim(),
+            document.getElementById('daftarAlamat').value.trim(),
+            document.getElementById('daftarPekerjaan').value, pw, ktpBase64
+        );
+        if (r.success) {
+            sucEl.style.display='block';
+            setTimeout(() => {
+                showPage('loginPage');
+                document.getElementById('daftarForm').reset();
+                ktpBase64 = null;
+                ktpPlaceholder.style.display = 'block';
+                ktpPreviewWrap.style.display = 'none';
+                ktpBadgeOk.style.display = 'none';
+                ktpErrorMsg.classList.remove('show');
+                ktpDropZone.classList.remove('error');
+                ktpPreviewImg.src = '';
+            }, 1500);
+        } else { errEl.innerText = r.message; errEl.style.display = 'block'; }
+    });
+
+    // Logout modal
+    const logoutModal = document.getElementById('logoutModal');
+    document.getElementById('logoutBtn').addEventListener('click', () => { logoutModal.classList.add('open'); });
+    document.getElementById('logoutCancelBtn').addEventListener('click', () => { logoutModal.classList.remove('open'); });
+    logoutModal.addEventListener('click', function(e) { if (e.target === logoutModal) logoutModal.classList.remove('open'); });
+    document.getElementById('logoutConfirmBtn').addEventListener('click', () => {
+        currentUser = null;
+        logoutModal.classList.remove('open');
+        // Reset form login
+        document.getElementById('nik').value = '';
+        document.getElementById('password').value = '';
+        document.getElementById('loginError').style.display = 'none';
+        showPage('loginPage');
+    });
+
+    document.getElementById('keDaftarBtn').addEventListener('click', () => showPage('daftarPage'));
+    document.getElementById('keLoginBtn').addEventListener('click', () => showPage('loginPage'));
+    document.getElementById('menuPengajuan').addEventListener('click', e => { e.preventDefault(); showPage('pengajuanPage'); });
+    document.getElementById('menuPembayaran').addEventListener('click', e => { e.preventDefault(); showPage('pembayaranPage'); });
+    document.getElementById('menuRiwayat').addEventListener('click', e => { e.preventDefault(); showPage('riwayatPage'); });
+    document.getElementById('homeProfileBtn').addEventListener('click', () => showPage('profilPage'));
+    document.getElementById('profilBackBtn').addEventListener('click', () => showPage('homePage'));
+    document.getElementById('navHomeFromProfil').addEventListener('click', e => { e.preventDefault(); showPage('homePage'); });
+    document.getElementById('navPengajuanFromProfil').addEventListener('click', e => { e.preventDefault(); showPage('pengajuanPage'); });
+    document.getElementById('navPembayaranFromProfil').addEventListener('click', e => { e.preventDefault(); showPage('pembayaranPage'); });
+    document.getElementById('navRiwayatFromProfil').addEventListener('click', e => { e.preventDefault(); showPage('riwayatPage'); });
+    document.getElementById('backHomeFromPengajuan').addEventListener('click', () => showPage('homePage'));
+    document.getElementById('backHomeFromPembayaran').addEventListener('click', () => showPage('homePage'));
+    document.getElementById('backHomeFromRiwayat').addEventListener('click', () => showPage('homePage'));
+
+    // Nav pengajuan
+    document.getElementById('navHomePengajuan').addEventListener('click', e => { e.preventDefault(); showPage('homePage'); });
+    document.getElementById('navPembayaranPengajuan').addEventListener('click', e => { e.preventDefault(); showPage('pembayaranPage'); });
+    document.getElementById('navRiwayatPengajuan').addEventListener('click', e => { e.preventDefault(); showPage('riwayatPage'); });
+    document.getElementById('navProfilPengajuan').addEventListener('click', e => { e.preventDefault(); showPage('profilPage'); });
+
+    // Nav pembayaran
+    document.getElementById('navHomePembayaran').addEventListener('click', e => { e.preventDefault(); showPage('homePage'); });
+    document.getElementById('navPengajuanPembayaran').addEventListener('click', e => { e.preventDefault(); showPage('pengajuanPage'); });
+    document.getElementById('navRiwayatPembayaran').addEventListener('click', e => { e.preventDefault(); showPage('riwayatPage'); });
+    document.getElementById('navProfilPembayaran').addEventListener('click', e => { e.preventDefault(); showPage('profilPage'); });
+
+    // Nav riwayat
+    document.getElementById('navHomeRiwayat').addEventListener('click', e => { e.preventDefault(); showPage('homePage'); });
+    document.getElementById('navPengajuanRiwayat').addEventListener('click', e => { e.preventDefault(); showPage('pengajuanPage'); });
+    document.getElementById('navPembayaranRiwayat').addEventListener('click', e => { e.preventDefault(); showPage('pembayaranPage'); });
+    document.getElementById('navProfilRiwayat').addEventListener('click', e => { e.preventDefault(); showPage('profilPage'); });
+
+    // ---- Toast notification ----
+    function showToast(msg, type = 'success') {
+        const t = document.getElementById('toastMsg');
+        t.textContent = msg;
+        t.className = 'toast-msg show ' + type;
+        setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    document.getElementById('profilSimpanBtn').addEventListener('click', () => {
+        const n = document.getElementById('profilInputNama').value.trim();
+        if (!n) { showToast('Nama tidak boleh kosong!', 'error'); return; }
+        updateCurrentUserProfile(n, document.getElementById('profilInputAlamat').value.trim(), document.getElementById('profilInputPekerjaan').value.trim());
+        showToast('Profil berhasil disimpan!', 'success');
+        setTimeout(() => showPage('homePage'), 1200);
+    });
+    document.getElementById('profilBatalBtn').addEventListener('click', () => {
+        updateProfileDisplay();
+        showToast('Perubahan dibatalkan.', 'info');
+    });
+
+    document.getElementById('loanForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const nama = document.getElementById('pengajuanNama').value.trim();
+        const pekerjaan = document.getElementById('pengajuanPekerjaan').value.trim();
+        const jumlah = parseFloat(document.getElementById('pengajuanJumlah').value);
+        const keperluan = document.getElementById('pengajuanKeperluan').value.trim();
+        const tenor = document.getElementById('pengajuanTenor').value;
+
+        if (!nama) { showToast('Nama lengkap wajib diisi!', 'error'); document.getElementById('pengajuanNama').focus(); return; }
+        if (!pekerjaan) { showToast('Pekerjaan/usaha wajib diisi!', 'error'); document.getElementById('pengajuanPekerjaan').focus(); return; }
+        if (!jumlah || jumlah < 100000) { showToast('Jumlah pinjaman minimal Rp 100.000!', 'error'); document.getElementById('pengajuanJumlah').focus(); return; }
+        if (!keperluan) { showToast('Keperluan peminjaman wajib diisi!', 'error'); document.getElementById('pengajuanKeperluan').focus(); return; }
+        if (!tenor || tenor === 'Pilih cicilan') { showToast('Lama cicilan wajib dipilih!', 'error'); return; }
+
+        showToast('Pengajuan berhasil dikirim! ✓', 'success');
+        this.reset();
+        setTimeout(() => showPage('homePage'), 1400);
+    });
+
+    document.getElementById('bayarSekarangBtn').addEventListener('click', () => {
+        showToast('Pembayaran berhasil dicatat! ✓', 'success');
+        setTimeout(() => showPage('homePage'), 1400);
+    });
+</script>
+</body>
+</html>

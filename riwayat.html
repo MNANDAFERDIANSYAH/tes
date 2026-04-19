@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Transaksi - BUMDes Bulu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-maroon: #800f2f;
+            --primary-green: #0a5d4a;
+            --status-lunas: #10b981;
+            --status-berjalan: #f59e0b;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            border-radius: 30px;
+            overflow-y: auto;
+            max-height: 90vh;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding-bottom: 30px;
+        }
+
+        /* Header */
+        .header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .header h2 { font-size: 1.1rem; color: var(--text-dark); flex-grow: 1; text-align: center; }
+        .back-icon { font-size: 1.2rem; cursor: pointer; color: var(--text-dark); }
+        .header-icon { color: var(--primary-green); font-size: 1.3rem; }
+
+        /* Banner Wave */
+        .banner-acc {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .banner-acc img { width: 100%; display: block; }
+
+        /* Summary Card */
+        .summary-card {
+            margin: 0 20px 25px;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #f1f5f9;
+            border-radius: 20px;
+            display: flex;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            gap: 15px;
+        }
+
+        .icon-box {
+            width: 45px; height: 45px; background: #e6f2f0;
+            color: var(--primary-green); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+        }
+
+        .summary-item { flex: 1; }
+        .summary-item p { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+        .summary-item h4 { font-size: 1rem; color: var(--text-dark); margin-top: 2px; }
+        .summary-item .highlight { color: var(--primary-maroon); font-weight: 800; }
+
+        /* Transaction List */
+        .section-label {
+            margin: 0 20px 15px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-list { display: flex; flex-direction: column; gap: 15px; padding: 0 20px; }
+
+        .history-card {
+            padding: 18px;
+            border: 1px solid #f1f5f9;
+            border-radius: 18px;
+            background: white;
+            position: relative;
+        }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        
+        .badge {
+            padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 700;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .badge-lunas { background: #ecfdf5; color: var(--status-lunas); }
+        .badge-berjalan { background: #fffbeb; color: var(--status-berjalan); }
+
+        .date-text { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+
+        .card-body { display: flex; justify-content: space-between; align-items: flex-end; }
+        .loan-title { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); }
+        .loan-id { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+        .loan-amount { font-size: 1.05rem; font-weight: 800; color: var(--text-dark); }
+
+        .card-footer {
+            margin-top: 15px; padding-top: 12px;
+            border-top: 1px dashed #e2e8f0;
+            display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center; margin-top: 30px; padding: 20px;
+        }
+        .empty-state i { font-size: 2.5rem; color: #e2e8f0; margin-bottom: 10px; }
+        .empty-state p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="header">
+            <i class="fa-solid fa-arrow-left back-icon" onclick="history.back()"></i>
+            <h2>Riwayat Transaksi</h2>
+            <i class="fa-regular fa-file-lines header-icon"></i>
+        </header>
+
+        <div class="banner-acc">
+            <img src="pembayaran_ft.png" alt="">
+        </div>
+
+        <div class="summary-card">
+            <div class="icon-box">
+                <i class="fa-regular fa-file-lines"></i>
+            </div>
+            <div class="summary-item">
+                <p>Total Peminjaman</p>
+                <h4 class="highlight">5 Kali</h4>
+            </div>
+            <div style="width: 1px; background: #f1f5f9;"></div>
+            <div class="summary-item" style="padding-left: 10px;">
+                <p>Total Nominal</p>
+                <h4>Rp 23.500.000</h4>
+            </div>
+        </div>
+
+        <p class="section-label">Daftar Transaksi</p>
+
+        <div class="card-list">
+            
+            <div class="history-card">
+                <div class="card-header">
+                    <span class="badge badge-lunas"><i class="fa-regular fa-circle-check"></i> Lunas</span>
+                    <span class="date-text">10 Apr 2025</span>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <p class="loan-title">Pinjaman Usaha Tani</p>
+                        <p class="loan-id">#PJ-202504-001</p>
+                    </div>
+                    <p class="loan-amount">Rp 5.000.000</p>
+                </div>
+                <div class="card-footer">
+                    <span style="color: var(--text-muted);"><i class="fa-regular fa-calendar"></i> 6 Bulan • Cicilan Rp 850.000</span>
+                    <span style="color: var(--status-lunas);"><span style="font-size: 1.2rem;">•</span> Lunas 12 Mei 2025</span>
+                </div>
+            </div>
+
+            <div class="history-card">
+                <div class="card-header">
+                    <span class="badge badge-berjalan"><i class="fa-regular fa-clock"></i> Berjalan</span>
+                    <span class="date-text">15 Jan 2025</span>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <p class="loan-title">Modal Dagang</p>
+                        <p class="loan-id">#PJ-202501-003</p>
+                    </div>
+                    <p class="loan-amount">Rp 8.000.000</p>
+                </div>
+                <div class="card-footer">
+                    <span style="color: var(--text-muted);"><i class="fa-regular fa-calendar"></i> 12 Bulan • Cicilan Rp 720.000</span>
+                    <span style="color: var(--status-berjalan);"><span style="font-size: 1.2rem;">•</span> Sisa 4 Cicilan</span>
+                </div>
+            </div>
+
+            <div class="history-card">
+                <div class="card-header">
+                    <span class="badge badge-lunas"><i class="fa-regular fa-circle-check"></i> Lunas</span>
+                    <span class="date-text">05 Okt 2024</span>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <p class="loan-title">Pengembangan Usaha</p>
+                        <p class="loan-id">#PJ-202410-002</p>
+                    </div>
+                    <p class="loan-amount">Rp 7.000.000</p>
+                </div>
+                <div class="card-footer">
+                    <span style="color: var(--text-muted);"><i class="fa-regular fa-calendar"></i> 6 Bulan • Cicilan Rp 1.183.000</span>
+                    <span style="color: var(--status-lunas);"><span style="font-size: 1.2rem;">•</span> Lunas 05 Apr 2025</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="empty-state">
+            <i class="fa-regular fa-file-zipper"></i>
+            <p>Tidak ada transaksi lainnya<br>
+            <span style="font-size: 0.7rem; font-weight: 500;">Riwayat akan muncul setelah ada pengajuan baru</span></p>
+        </div>
+
+    </div>
+
+</body>
+</html>

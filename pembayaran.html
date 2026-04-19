@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran Angsuran - BUMDes Bulu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-maroon: #800f2f;
+            --primary-green: #0a5d4a;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Container meniru bentuk layar HP */
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h2 {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .back-icon { font-size: 1.2rem; cursor: pointer; color: var(--text-dark); }
+
+        /* Banner Aksesoris */
+        .banner-acc {
+            width: 100%;
+            height: 60px;
+            background: url('path_to_your_wave_asset.png') no-repeat center; /* Ganti dengan gambar gelombang jika ada */
+            background-size: cover;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        /* Sisa Pinjaman Card */
+        .loan-status-card {
+            margin: 0 20px 20px;
+            padding: 20px;
+            border: 1px solid #f1f5f9;
+            border-radius: 20px;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .flex-row { display: flex; justify-content: space-between; align-items: flex-start; }
+        
+        .timer-badge {
+            background: #fff4e6;
+            color: #d97706;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .progress-container {
+            margin: 15px 0;
+            background: #f1f5f9;
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 50%;
+            height: 100%;
+            background: var(--primary-green);
+        }
+
+        /* Bill Card */
+        .bill-card {
+            margin: 0 20px 25px;
+            padding: 18px;
+            background: #fff9f0;
+            border: 1px solid #ffecce;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .bill-icon {
+            width: 45px;
+            height: 45px;
+            background: #e6f2f0;
+            color: var(--primary-green);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Details Section */
+        .section-label {
+            margin: 0 20px 10px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detail-row {
+            margin: 0 20px 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+        }
+
+        .divider {
+            margin: 15px 20px;
+            height: 1px;
+            background: #f1f5f9;
+        }
+
+        /* Payment Methods */
+        .methods-list {
+            margin: 0 20px 30px;
+            border: 1px solid #f1f5f9;
+            border-radius: 16px;
+            padding: 5px 0;
+        }
+
+        .method-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .method-item:not(:last-child) { border-bottom: 1px solid #f8fafc; }
+
+        .radio-circle {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .method-item.active .radio-circle { border-color: var(--primary-maroon); }
+        .method-item.active .radio-circle::after {
+            content: "";
+            width: 10px;
+            height: 10px;
+            background: var(--primary-maroon);
+            border-radius: 50%;
+        }
+
+        .method-icon {
+            width: 35px;
+            height: 35px;
+            background: #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+        }
+
+        /* Action Buttons */
+        .btn-pay {
+            display: block;
+            width: calc(100% - 40px);
+            margin: 0 20px 15px;
+            background: var(--primary-maroon);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-safe {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 0 20px 20px;
+            padding: 12px;
+            border: 1px solid #e6f2f0;
+            background: #fafffe;
+            color: var(--primary-green);
+            font-size: 0.85rem;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="header">
+            <i class="fa-solid fa-arrow-left back-icon" onclick="history.back()"></i>
+            <h2>Pembayaran Angsuran</h2>
+            <div style="width: 24px;"></div> </header>
+
+        <div class="banner-acc">
+            <img src="pembayaran_ft.png" alt="" style="width: 100%; height: auto;">
+        </div>
+
+        <div class="loan-status-card">
+            <div class="flex-row">
+                <div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Sisa Pinjaman</p>
+                    <p style="font-size: 1.1rem; font-weight: 800; color: var(--text-dark);">Rp 5.500.000</p>
+                </div>
+                <div class="timer-badge">
+                    <i class="fa-regular fa-clock"></i> 6 Bulan Lagi
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+            <div class="flex-row" style="font-size: 0.75rem; font-weight: 700;">
+                <span style="color: var(--primary-green);">6 / 12 Cicilan</span>
+                <span style="color: var(--text-muted);">50% Lunas</span>
+            </div>
+        </div>
+
+        <div class="bill-card">
+            <div class="bill-icon">
+                <i class="fa-regular fa-calendar-check"></i>
+            </div>
+            <div style="flex-grow: 1;">
+                <p style="font-size: 0.9rem; font-weight: 700; color: var(--text-dark);">Tagihan Bulan Ini</p>
+                <p style="font-size: 0.75rem; color: var(--primary-maroon); font-weight: 600;">Jatuh tempo: 10 Mei 2025</p>
+            </div>
+            <p style="font-size: 1.1rem; font-weight: 800; color: var(--primary-maroon);">Rp 550.000</p>
+        </div>
+
+        <p class="section-label">Rincian Pembayaran</p>
+        <div class="detail-row">
+            <span style="color: var(--text-muted);">Angsuran Pokok</span>
+            <span style="font-weight: 600;">Rp 450.000</span>
+        </div>
+        <div class="detail-row">
+            <span style="color: var(--text-muted);">Bunga/Margin</span>
+            <span style="font-weight: 600;">Rp 100.000</span>
+        </div>
+        <div class="divider"></div>
+        <div class="detail-row" style="margin-top: 5px;">
+            <span style="font-weight: 800; color: var(--text-dark);">Total Bayar</span>
+            <span style="font-weight: 800; color: var(--primary-maroon); font-size: 1.1rem;">Rp 550.000</span>
+        </div>
+
+        <p class="section-label" style="margin-top: 25px;">Metode Pembayaran</p>
+        <div class="methods-list">
+            <div class="method-item active">
+                <div class="radio-circle"></div>
+                <div class="method-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                <div>
+                    <p style="font-size: 0.9rem; font-weight: 700;">Bayar Tunai</p>
+                    <p style="font-size: 0.7rem; color: var(--text-muted);">Datang ke kantor BUMDes</p>
+                </div>
+            </div>
+            <div class="method-item">
+                <div class="radio-circle"></div>
+                <div class="method-icon"><i class="fa-solid fa-building-columns"></i></div>
+                <div>
+                    <p style="font-size: 0.9rem; font-weight: 700;">Transfer Bank</p>
+                    <p style="font-size: 0.7rem; color: var(--text-muted);">Manual / Kode VA</p>
+                </div>
+            </div>
+            <div class="method-item">
+                <div class="radio-circle"></div>
+                <div class="method-icon"><i class="fa-solid fa-wallet"></i></div>
+                <div>
+                    <p style="font-size: 0.9rem; font-weight: 700;">E-Wallet</p>
+                    <p style="font-size: 0.7rem; color: var(--text-muted);">OVO, Dana, GoPay</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-pay">
+            <i class="fa-regular fa-paper-plane"></i> Bayar Sekarang
+        </button>
+
+        <div class="btn-safe">
+            <i class="fa-solid fa-lock"></i> Pembayaran aman & tercatat
+        </div>
+    </div>
+
+</body>
+</html>

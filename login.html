@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BUMDES Subur Jaya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+
+        /* Bagian Header Hanya Untuk Gambar */
+        .header-section {
+            margin-bottom: 30px;
+        }
+
+        .logo-img {
+            width: 100%;
+            max-width: 320px; /* Ukuran maksimal logo agar tidak terlalu besar */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Form Styling */
+        form {
+            margin-top: 10px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: #1e293b;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            color: #4b5563;
+        }
+
+        .input-group input:focus {
+            border-color: #7b2843;
+        }
+
+        /* Tombol Login */
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background-color: #0a5d4a;/* Merah Marun sesuai desain */
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: #5d1e32;
+        }
+
+        /* Footer */
+        .footer-text {
+            margin-top: 35px;
+            font-size: 1rem;
+            color: #4b5563;
+        }
+
+        .footer-text a {
+            color: #7b2843;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="header-section">
+            <img src="bumdes.png" alt="Logo Subur Jaya" class="logo-img">
+        </div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="nik">NIK/KTP</label>
+                <input type="text" id="nik" placeholder="Enter your NIK/KTP" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+
+        <div class="footer-text">
+            Belum punya akun? <a href="#">Daftar di sini</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert("Proses login sedang berjalan...");
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - BUMDes Bulu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-maroon: #7b2843;
+            --primary-green: #0a5d4a;
+            --text-dark: #334155;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container Utama (Meniru bentuk HP di gambar) */
+        .home-container {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Tombol Profil di Pojok Kanan Atas */
+        .profile-btn {
+            align-self: flex-end;
+            background-color: var(--primary-maroon);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        /* Bagian Logo (Header Image) */
+        .header-image {
+            width: 100%;
+            height: auto;
+            margin-bottom: 25px;
+        }
+
+        /* Deskripsi Teks */
+        .welcome-text {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            text-align: center;
+            line-height: 1.6;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        .divider {
+            width: 80%;
+            height: 1px;
+            background-color: #e2e8f0;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        /* Kartu Menu */
+        .menu-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            border: 2px solid;
+            border-radius: 18px;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .menu-item:active {
+            transform: scale(0.98);
+        }
+
+        /* Warna spesifik tiap menu */
+        .menu-green { border-color: var(--primary-green); }
+        .menu-maroon { border-color: var(--primary-maroon); }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        .bg-green-light { background-color: #e6f2f0; color: var(--primary-green); }
+        .bg-maroon-light { background-color: #f4e9ec; color: var(--primary-maroon); }
+
+        .menu-info h3 {
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .menu-info p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Footer Info */
+        .footer-info {
+            text-align: center;
+            width: 100%;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .info-item i {
+            color: var(--primary-maroon);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="home-container">
+        <div class="profile-btn">
+            <i class="fa-regular fa-user"></i>
+        </div>
+
+        <img src="home bm.png" alt="BUMDes Bulu Logo" class="header-image">
+
+        <p class="welcome-text">
+            BUMDes hadir untuk membantu kebutuhan masyarakat dengan layanan yang mudah, cepat, dan terpercaya.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="menu-list">
+            
+            <a href="#" class="menu-item menu-green">
+                <div class="icon-box bg-green-light">
+                    <i class="fa-regular fa-file-lines"></i>
+                </div>
+                <div class="menu-info">
+                    <h3>Pengajuan Pinjaman</h3>
+                    <p>Ajukan pinjaman baru</p>
+                </div>
+            </a>
+
+            <a href="#" class="menu-item menu-maroon">
+                <div class="icon-box bg-maroon-light">
+                    <i class="fa-regular fa-credit-card"></i>
+                </div>
+                <div class="menu-info">
+                    <h3>Pembayaran Angsuran</h3>
+                    <p>Bayar cicilan pinjaman</p>
+                </div>
+            </a>
+
+            <a href="#" class="menu-item menu-green">
+                <div class="icon-box bg-green-light">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <div class="menu-info">
+                    <h3>Riwayat Transaksi</h3>
+                    <p>Lihat riwayat transaksi</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="footer-info">
+            <div class="info-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>BUMDes Bulu, Desa Bulu, Balen, Bojonegoro</span>
+            </div>
+            <div class="info-item">
+                <i class="fa-brands fa-whatsapp"></i>
+                <span>0851-2345-6789 (WhatsApp)</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
